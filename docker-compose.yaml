@@ -54,6 +54,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker:/var/lib/docker
+      - /etc/docker/daemon.json：/etc/docker/daemon.json
     depends_on:
       - drone-server
     environment:
