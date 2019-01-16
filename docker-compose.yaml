@@ -53,6 +53,7 @@ services:
     command: agent
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker:/var/lib/docker
     depends_on:
       - drone-server
     environment:
