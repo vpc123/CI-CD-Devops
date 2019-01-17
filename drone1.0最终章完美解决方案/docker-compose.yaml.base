@@ -1,0 +1,58 @@
+version: '3'
+services:
+  drone-server:
+    image: drone/drone:1.0.0-rc.1
+    ports:
+      - "80:80"
+    volumes:
+      - ./drone:/var/lib/drone/
+    environment:
+      - DRONE_OPEN=true
+      - DRONE_SERVER_HOST=drone-server
+      - DRONE_DEBUG=true
+      - DRONE_GIT_ALWAYS_AUTH=false
+      - DRONE_GOGS=true
+      - DRONE_GOGS_SKIP_VERIFY=false
+      - DRONE_GOGS_SERVER=http://gogs:3000
+      - DRONE_PROVIDER=gogs
+      - DRONE_DATABASE_DATASOURCE=/var/lib/drone/drone.sqlite
+      - DRONE_DATABASE_DRIVER=sqlite3
+      - DRONE_SERVER_PROTO=http
+      - DRONE_RPC_SECRET=ALQU2M0KdptXUdTPKcEw
+  gogs:
+    image: gogs/gogs
+    ports:
+      - "10022:22"
+      - "3000:3000"
+    volumes:
+      - ./data/gogs:/data
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:5.7.16
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./gogs/mysql:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: gogs
+      MYSQL_USER: gogs
+      MYSQL_PASSWORD: 123456
+      TZ: Asia/Shanghai
+  drone-agent:
+    image: drone/agent:1.0.0-rc.1
+    depends_on:
+      - drone-server
+    environment:
+      - DRONE_RPC_SERVER=http://drone-server
+      - DRONE_RPC_SECRET=ALQU2M0KdptXUdTPKcEw
+      - DRONE_DEBUG=true
+      - DOCKER_HOST=tcp://docker-bind:2375
+  docker-bind:
+     image: docker:dind
+     volumes:
+       - /etc/docker/daemon.json:/etc/docker/daemon.json
+     privileged: true
+#     command: --storage-driver=overlay2

@@ -1,0 +1,7 @@
+kind: pipeline
+name: default
+steps:
+- name: info
+  image: registry.cn-hangzhou.aliyuncs.com/baz/busybox:1.0
+  commands:
+  - echo "liuyusheng hao ke ai !"

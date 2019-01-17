@@ -1,0 +1,13 @@
+kind: pipeline
+name: default
+steps:
+- name: infoapp
+  image: registry.cn-hangzhou.aliyuncs.com/baz/busybox:1.0
+  commands:
+  - echo "appdemo liuyushengshigehaohaizi win"
+  - echo $USERNAME, $PASSWORD
+  environment:
+    USERNAME:
+      from_secret: username
+    PASSWORD:
+      from_secret: password
