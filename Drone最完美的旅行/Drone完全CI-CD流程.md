@@ -69,6 +69,10 @@ https://github.com/vpc123/CI-CD-Devops/tree/master/drone1.0%E6%9C%80%E7%BB%88%E7
 
 参考链接：
 
+重点参考：
+
+-  重点：https://github.com/appleboy
+
 - 1  https://blog.csdn.net/kikajack/article/details/80593751
  
 - 2  https://blog.csdn.net/github_35614077/article/details/83028832
