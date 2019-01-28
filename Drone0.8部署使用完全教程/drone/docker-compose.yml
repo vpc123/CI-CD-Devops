@@ -1,0 +1,26 @@
+version: '2'
+ 
+services:
+  drone-server:
+    image: drone/drone:0.8
+    ports:
+      - 8000:8000
+      - 9000:9000
+    volumes:
+      - /tmp/drone:/var/lib/drone/
+    environment:
+      - DRONE_OPEN=true
+      - DRONE_HOST=http://10.100.100.32:9000
+      - DRONE_GOGS=true
+      - DRONE_GOGS_URL=http://10.100.100.32:3000
+      - DRONE_SECRET=test
+  drone-agent:
+    image: drone/agent:0.8
+    command: agent
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - drone-server
+    environment:
+      - DRONE_SERVER=10.100.100.32:9000
+      - DRONE_SECRET=test

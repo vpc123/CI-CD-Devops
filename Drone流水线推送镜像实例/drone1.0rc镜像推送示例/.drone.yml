@@ -1,0 +1,19 @@
+kind: pipeline
+name: docker
+
+steps:
+- name: publish
+  image: plugins/docker:17.12
+  settings:
+    repo: registry.cn-hangzhou.aliyuncs.com/vpc123/three
+    registry: registry.cn-hangzhou.aliyuncs.com
+    auto_tag: true
+    dockerfile: Dockerfile
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+  when:
+    event:
+    - push
+    - tag
