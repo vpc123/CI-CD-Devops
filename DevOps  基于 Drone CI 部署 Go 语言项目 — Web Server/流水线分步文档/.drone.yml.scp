@@ -1,0 +1,48 @@
+workspace:
+base: /go
+path: src/repo/goweb-app
+
+clone:
+  git:
+    image: plugins/git
+    depth: 50
+    tags: true
+
+pipeline:
+
+  ping: 
+    image: mongo:latest
+    commands:
+      - sleep 3
+      - mongo --host mgo --eval "{ping:1}"
+  image:  
+    image: plugins/docker
+    repo: registry.cn-hangzhou.aliyuncs.com/vpc123/six
+    registry: registry.cn-hangzhou.aliyuncs.com
+    secrets: [ docker_username, docker_password ]
+    context: ./
+    dockerfile: ./Dockerfile
+    default_tags: true
+    when:
+      event: push
+
+  scp:
+    image: appleboy/drone-scp
+    group: build
+    host:
+      - 192.168.131.30
+    username: root
+    port: 22
+    secrets: [ ssh_password ]
+    target: /home/workspace/ 
+    source: ./release.tar.gz              
+    when:
+      event: push
+
+      
+services:
+  mgo:
+    image: mongo:latest
+
+branches:
+  include: [ master, release/* ]

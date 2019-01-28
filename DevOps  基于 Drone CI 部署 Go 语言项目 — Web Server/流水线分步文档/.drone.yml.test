@@ -1,0 +1,23 @@
+workspace:
+base: /go
+path: src/repo/goweb-app
+
+clone:
+  git:
+    image: plugins/git
+    depth: 50
+    tags: true
+
+pipeline:
+
+  ping: 
+    image: mongo:latest
+    commands:
+      - sleep 3
+      - mongo --host mgo --eval "{ping:1}"
+services:
+  mgo:
+    image: mongo:latest
+
+branches:
+  include: [ master, release/* ]

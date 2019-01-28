@@ -1,0 +1,9 @@
+workspace:
+base: /go
+path: src/repo/goweb-app
+
+clone:
+  git:
+    image: plugins/git
+    depth: 50
+    tags: true
